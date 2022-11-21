@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+ <style>
+  *{
+    box-sizing: border-box;
+    padding: 0px;
+    margin: 0px;
+  }
+ .container{
+  background-color: antiquewhite;
+  position: relative;
+  /* display: flex; */
+ }
+ .game-board{
+  width: 540px;
+  height: 540px;
+  margin: auto;
+  background-color: #fff;
+  border-radius: 30px;
+  display: flex;
+  padding: 10px;
+  flex-wrap: wrap;
+  gap: 10px;
+  
+ }
+ .box{
+  width: calc(50% - 10px);
+  height: calc(50% - 10px) ;
+  /* border-radius: 30px; */
+  background-color: blue;
+  cursor: pointer;
+
+ }
+ .box.answer{
+  width: calc(50%-10px);
+  height: calc(50%-10px) ;
+  /* border-radius: 30px; */
+  background-color: rgb(7, 180, 254);
+ }
+ .score-board{
+  font-size: larger;
+  color: white;
+  border:1px solid #111;
+  background-color: red;
+  width: 150px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  padding: 10px;
+  /* flex-wrap: wrap; */
+  position: absolute;
+  left: 44%;
+  /* 置中用top: 50% left:50% */
+  /* transform: translate( width:50%; height: 50px;); */
+  /* padding-left: 100px; */
+   /* justify-content: center; */
+  /* flex-direction:row-reverse; */
+
+
+ }
+ </style>
+</head>
+<body>
+  <div class="container">
+    <div class="game-board">
+      <div class="box answer" ></div>
+      <!--onclick="getRandomColor()"  -->
+      <div class="box"></div>
+      <div class="box"></div>
+      <div class="box"></div>
+    </div>
+    <div class="score-board">分數:</div>
+  </div>
+
+
+  <script>
+    //who
+    // const boxes = document.querySelectorAll('.box')
+    const board = document.querySelector('.game-board');
+    const scoreBoard = document.querySelector('.score-board');
+    let score = 0;
+    let count = 0;
+    
+    //what time
+    function setBoard(level){
+      //每一次進入function 就先宣告找出所有的box
+      let boxes = document.querySelectorAll('.box');
+      // console.log('boxes');
+
+      boxes.forEach(function(box){
+        //每一個box都綁上事件
+        box.addEventListener('click',function(){
+          
+          //如果點到正解
+          //設置一個隨機數字產生器 到一個(0-3)四個數字
+          //1.如果我們的次數的數字等於變數 就會執行"答案_改變顏色" 若不然 就不會改變顏色
+          //2.利用隨機數的變數的加成 使顏色也跟著變化
+          console.log('good');
+          if(box.classList.contains('answer')){
+          score = score+1;
+          count+= 1;
+          // if(count %3 ==0){
+          //   count =0;
+          //   //score為3的倍數時 等級提升
+          //   setBoard(level + 1);
+          // }else {
+          //   setBoard(level);
+          // }
+          console.log(`你的分數:${score}`);
+          scoreBoard.innerHTML = `得分:${score}分`;
+
+            let random = Math.floor(Math.random()*(level+1)*(level+1));
+            let r = Math.floor(Math.random()*250+2);
+            let g = Math.floor(Math.random()*250+2);
+            let b = Math.floor(Math.random()*250+2);
+
+            let sideLength = (520-10*level)/(level+1);
+            // console.log(r,g,b);
+
+            board.innerHTML ='';
+            //math.floor 無條件捨去法
+            console.log(Math.floor(Math.random()*(level+1) * (level+1)));
+            // console.log(i);
+
+            for(let i = 0; i < (level+1)*(level+1); i++){
+               if(i == random){
+                 //樣板字串
+                 //1.``
+                //2.$
+                board.innerHTML += `<div class="box answer" 
+                style="background-color:rgba(${r},${g},${b},0.3); width: ${sideLength}px; height:${sideLength}px;"></div>`;
+                //rgba 第四個數字是0~1 指透明度 0就是完全透明
+                // `<div class="box answer" onclick="${getRandomColor()}"></div>`
+              }else{
+                board.innerHTML += `<div class="box" 
+                style="background-color:rgba(${r},${g},${b},1);  width: ${sideLength}px; height:${sideLength}px"></div>`;
+              }
+            }
+            console.log('not bad');
+            console.log(`你的分數:${score}`);
+            // board.innerHTML = '<div class="box answer"></div><div class="box"></div><div class="box"></div><div class="box"></div>;'
+             //遞回函數 重新宣告所有box 重新返回事件
+            setBoard(level+1);
+          }else{
+            alert('回頭吧!')
+          }
+        });
+        
+    });
+
+    }
+    //do what
+
+    // boxes.forEach(function(box){
+    //   box.addEventListener('click', function(){
+    //     getRandomColor()
+    //   });
+    // })
+      
+    setBoard(1);
+  </script>
+</body>
+</html>
